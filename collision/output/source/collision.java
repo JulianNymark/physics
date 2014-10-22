@@ -94,14 +94,13 @@ public void physics( float dt ) {
 	}
     }
     
-    // circle to circle
-    System.out.println(al.size());
+    // circle to circlec collision
     for (int i = 0; i < al.size(); ++i) {
-	for (int i2 = i; i < al.size(); ++i) {
+	for (int i2 = i; i2 < al.size(); ++i2) {
 	    Ball b = al.get(i);
 	    Ball b2 = al.get(i2);
-	    
-	    if (!(i == i2)) {
+
+	    if (b != b2) {
 		// detect collision
 		if (b.location.dist(b2.location) < b.radius.x + b2.radius.x) {
 		    // resolve collision
