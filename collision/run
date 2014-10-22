@@ -1,0 +1,4 @@
+#!/bin/bash
+
+mkdir -p output
+processing-java --sketch=$(pwd) --output=./output --run --force
