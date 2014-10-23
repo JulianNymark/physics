@@ -17,6 +17,7 @@ PVector mouseOld;
 PVector g = new PVector(0, 900); // pixels
 
 float DAMPEN = 0.90;
+float DAMPEN_C2C = 0.80;
 
 void setup(){
     size(1600,900);
@@ -85,13 +86,17 @@ void physics( float dt ) {
 	    Ball b2 = al.get(i2);
 
 	    if (b != b2) {
+		float intersect = b.location.dist(b2.location) - (b.radius.x + b2.radius.x);
 		// detect collision
-		if (b.location.dist(b2.location) < b.radius.x + b2.radius.x) {
+		if (intersect < 0) {
 		    // resolve collision
 		    PVector vec_delta = b.location.get();
 		    vec_delta.sub(b2.location);
 		    float angle_delta = vec_delta.heading();
-		    
+
+		    /////////////////////
+		    // resolve velocities
+		    /////////////////////
 		    // rotate vel
 		    b2.velocity.rotate(-angle_delta);
 		    b.velocity.rotate(-angle_delta);
@@ -104,6 +109,19 @@ void physics( float dt ) {
 		    // rotate back
 		    b.velocity.rotate(angle_delta);
 		    b2.velocity.rotate(angle_delta);
+
+		    /////////////////////
+		    // resolve locations
+		    /////////////////////
+		    float overlap = intersect/2;
+		    vec_delta.normalize();
+		    vec_delta.mult(overlap);
+		    b.location.sub(vec_delta);
+		    b2.location.add(vec_delta);
+
+		    // dampening
+		    b.velocity.mult(DAMPEN_C2C);
+		    b2.velocity.mult(DAMPEN_C2C);
 		}
 	    }
 	}
@@ -138,7 +156,15 @@ void mouseReleased(){
     PVector mo = mouseOld.get();
 
     if (mouseButton == LEFT){
-	Ball b = new Ball(mo, b_vel, new PVector(0,0));
+	Ball b = new Ball(mo, b_vel, new PVector());
 	al.add(b);
     }
+
+    if (mouseButton == RIGHT){
+	for (int i = 0; i < 10; ++i){
+	    Ball b = new Ball(new PVector(mouseX, mouseY), new PVector(), new PVector());
+	    al.add(b);
+	}
+    }
+
 }
