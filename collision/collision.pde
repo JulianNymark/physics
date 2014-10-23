@@ -1,3 +1,7 @@
+float DAMPEN_BORDER = 0.90;
+float DAMPEN_C2C = 0.99;
+float C_RADIUS = 10;
+
 class Ball {
     public PVector location;
     public PVector velocity;
@@ -8,16 +12,13 @@ class Ball {
 	location = l;
 	velocity = v;
 	acceleration = a;
-	radius = new PVector(20, 20);
+	radius = new PVector(C_RADIUS, C_RADIUS);
     }
 }
 
 ArrayList<Ball> al;
 PVector mouseOld;
 PVector g = new PVector(0, 900); // pixels
-
-float DAMPEN = 0.90;
-float DAMPEN_C2C = 0.80;
 
 void setup(){
     size(1600,900);
@@ -59,22 +60,22 @@ void physics( float dt ) {
     for (Ball b : al) {
 	if (b.location.x > width - b.radius.x ) {
 	    b.velocity.x *= -1;
-	    b.velocity.mult(DAMPEN);
+	    b.velocity.mult(DAMPEN_BORDER);
 	    b.location.x = width - b.radius.x;
 	}
 	if (b.location.x < 0 + b.radius.x) {
 	    b.velocity.x *= -1;
-	    b.velocity.mult(DAMPEN);
+	    b.velocity.mult(DAMPEN_BORDER);
 	    b.location.x = 0 + b.radius.x;
 	}
 	if (b.location.y > height - b.radius.y) {
 	    b.velocity.y *= -1;
-	    b.velocity.mult(DAMPEN);
+	    b.velocity.mult(DAMPEN_BORDER);
 	    b.location.y = height - b.radius.y;
 	}
 	if (b.location.y < 0 + b.radius.y) {
 	    b.velocity.y *= -1;
-	    b.velocity.mult(DAMPEN);
+	    b.velocity.mult(DAMPEN_BORDER);
 	    b.location.y = 0 + b.radius.y;
 	}
     }
