@@ -87,8 +87,11 @@ void physics( float dt ) {
 	    Ball b2 = al.get(i2);
 
 	    if (b != b2) {
-		float intersect = b.location.dist(b2.location) - (b.radius.x + b2.radius.x);
+		////////////////////
 		// detect collision
+		// assumption: balls are circles (not ellipses)
+		////////////////////
+		float intersect = b.location.dist(b2.location) - (b.radius.x + b2.radius.x);
 		if (intersect < 0) {
 		    // resolve collision
 		    PVector vec_delta = b.location.get();
@@ -97,7 +100,9 @@ void physics( float dt ) {
 
 		    /////////////////////
 		    // resolve velocities
+		    // assumption: balls of equal mass
 		    /////////////////////
+		    
 		    // rotate vel
 		    b2.velocity.rotate(-angle_delta);
 		    b.velocity.rotate(-angle_delta);
@@ -113,6 +118,8 @@ void physics( float dt ) {
 
 		    /////////////////////
 		    // resolve locations
+		    // assumption: balls don't intersect more than the
+		    //             sum of their radiuses
 		    /////////////////////
 		    float overlap = intersect/2;
 		    vec_delta.normalize();
@@ -127,6 +134,12 @@ void physics( float dt ) {
 	    }
 	}
     }
+
+    // print some info
+    fill(255);
+    textSize(32);
+    text("FPS: " + round(frameRate), 10, 32);
+    text("Balls: " + al.size(), 10, 32*2);
 }
 
 void draw_stuff() {
